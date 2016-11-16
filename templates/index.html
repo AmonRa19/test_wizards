@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Best cities</title>
+
+    
+    <link rel="stylesheet" type=text/css href="static/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css">
+
+    <!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
+    <script src="http://d3js.org/d3.v3.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <h1 class='text-primary text-center'><strong>Top 20 cities</strong></h1>
+        <!--<ol>
+        {% for city in cities | reverse %}
+            <div class="col-lg-12"><li class="text-success">{{ city.city }} with zip {{ city._id }} has <span class="population">{{ city.population }}</span> population</li> </div>
+        {% endfor %}
+        </ol> -->
+    </div> 
+</div>
+
+<table align="center">
+  <td> 
+    <table class="table table-hover table-striped">
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">State</th>
+        <th scope="col">City</th>
+        <th scope="col">Zip</th>
+        <th scope="col">Population</th>
+    </tr>
+    {% for city in cities | reverse %}
+      {% if loop.index <= 10 %}
+        <tr>
+          <td>{{ loop.index }}.</td>
+          <td>{{ city.state }}</td>
+          <td>{{ city.city }}</td>
+          <td>{{ city._id }}</td>
+          <td>{{ city.population }}</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </table>
+  </td>
+  <td>
+    <table class="table table-hover table-striped">
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">State</th>
+        <th scope="col">City</th>
+        <th scope="col">Zip</th>
+        <th scope="col">Population</th>
+    </tr>
+    {% for city in cities | reverse %}
+      {% if loop.index > 10 %}
+        <tr>
+          <td>{{ loop.index }}.</td>
+          <td>{{ city.state }}</td>
+          <td>{{ city.city }}</td>
+          <td>{{ city._id }}</td>
+          <td>{{ city.population }}</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </table>
+  </td>
+</table>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+
+<script>
+
+/*//Width and height
+var w = 1000;
+var h = 300;
+var barPadding = 1;
+
+var data = [];
+var populations = document.getElementsByClassName('population');
+
+for (var i = 0; i < populations.length; i++) {
+    data.push(+$(populations[i]).html());
+};
+
+//Create SVG element
+var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+svg.selectAll("rect")
+   .data(data)
+   .enter()
+   .append("rect")
+   .attr("x", function(d, i) {
+        return i * (w / data.length);
+   })
+   .attr("y", function(d) {
+        return h - (d * 0.002);
+   })
+   .attr("width", w / data.length - barPadding)
+   .attr("height", function(d) {
+        return d * 0.002;
+   })
+   .attr("fill", function(d) {
+        return "rgb(0, 0, " + (d * 10) + ")";
+   });
+
+svg.selectAll("text")
+   .data(data)
+   .enter()
+   .append("text")
+   .text(function(d) {
+        return d;
+   })
+   .attr("text-anchor", "middle")
+   .attr("x", function(d, i) {
+        return i * (w / data.length) + (w / data.length - barPadding) / 2;
+   })
+   .attr("y", function(d) {
+        return h - (d * 0.002) + 14;
+   })
+   .attr("font-family", "sans-serif")
+   .attr("font-size", "11px")
+   .attr("fill", "white");*/
+
+var dataset = {{ cities | tojson | safe }}
+dataset.reverse();
+
+/*ширина SVG элемента*/
+var svgWidth = 700;
+
+/*высота SVG элемента*/
+var svgHeight = 300; 
+
+/*отступы графика внутри SVG элемента*/
+var chartMargin = {top: 50, right: 30, bottom: 80, left: 60};
+
+/*ширина графика*/
+var chartWidth = svgWidth - chartMargin.right - chartMargin.left;
+
+/*высота графика*/
+var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom; 
+
+/*создаем SVG элемент и указываем ему ширину и высоту*/
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
+
+/*создаем группу, внутри которой будут располагаться элементы графика*/
+var chart = svg.append("g")
+    .attr("transform", "translate(" + chartMargin.left + "," + chartMargin.top + ")");
+
+/*функция масштабирования значений по оси X*/
+var xScale = d3.scale.ordinal()
+    .rangeRoundBands([0, chartWidth], .2)
+    //.domain(dataset.map(function (d) { return d.label; }));
+    // .domain(dataset.map(function (d) { return d.city; }));
+    .domain(dataset.map(function (d) { return d._id; }));
+
+/*функция масштабирования значений по оси Y*/  
+var yScale = d3.scale.linear()
+    .range([chartHeight, 0])
+    //.domain([0, d3.max(dataset, function (d) { return d.data; })]);
+    .domain([0, d3.max(dataset, function (d) { return d.population; })]);
+
+/*функция создания горизонтальной оси Х*/
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom");
+
+/*функция создания вертикальной оси Y*/
+var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left");
+
+/*Добавляем оси на график*/
+var lHorizontalAxis = chart.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0, " + chartHeight + ")")
+    .call(xAxis)
+    .selectAll("g.tick")
+    .call(tickTextWrapping, xScale.rangeBand());
+
+var lVerticalAxis = chart.append("g")
+    .attr("class", "y axis")
+    .call(yAxis);
+
+/* повертаєм тескт */
+function tickTextWrapping(aTick, aTextMaxWidth) {
+    var lTickTextsWidth = 0;
+    aTick.each(function (d) {
+        var lTick = d3.select(this);
+        lTick.select("text").remove();
+        var lTextContainerInitialX = 0;
+        var lTextContainerInitialY = 17;
+        var lTextContainer = lTick.append("g").attr("transform", "translate(" + lTextContainerInitialX + ", " + lTextContainerInitialY + ")");
+        var lText = lTextContainer.append("text").text(d).style("text-anchor", "middle");
+        var lTextWidth = lText[0][0].clientWidth;
+        var lTextHeight = lText[0][0].clientHeight;
+        if (aTextMaxWidth/lTextWidth < 1) {
+            var lTextRadian = Math.acos(aTextMaxWidth/lTextWidth) * 180 / Math.PI;
+            var lTextIndent = lTextHeight / 2;
+            lTextContainerInitialY -= lTextIndent;
+            lText.attr("transform", "rotate(" + -lTextRadian + ")").attr("dy", lTextIndent).style("text-anchor", "middle");
+            var lTextContainerWidth = -lTextWidth * Math.sin(aTextMaxWidth/lTextWidth) / 2 + lTextContainerInitialX;
+            var lTextContainerHeight = lTextWidth * Math.cos(aTextMaxWidth/lTextWidth) / 2 + lTextContainerInitialY;
+            lTextContainer.attr("transform", "translate(" + lTextContainerWidth + ", " + lTextContainerHeight + ")");
+        }
+    });
+}
+
+/*Добавляем столбики*/
+chart.selectAll("rect.bar")
+    .data(dataset)
+    .enter()
+    .append("rect")
+    .attr("class", "bar")
+    // .attr("x", function (d) { return xScale(d.city); })
+    .attr("x", function (d) { return xScale(d._id); })
+    .attr("width", xScale.rangeBand())
+    // .attr("y", function (d) { return yScale(d.data); })
+    .attr("y", function (d) { return yScale(d.population); })
+    //.attr("height", function (d) { return chartHeight - yScale(d.data); })
+    .attr("height", function (d) { return chartHeight - yScale(d.population); })
+    /* pokazaty pidkazku */
+    .on("mouseenter", function (d, i) {
+        chart.select("#label" + i).style("display", "block");
+        // chart.select("#_id" + i).style("display", "block");
+    })
+    .on("mouseleave", function (d, i) { 
+        chart.select("#label" + i).style("display", "none");
+        // chart.select("#city" + i).style("display", "none");  
+    });
+
+
+/*Добавляем легенду*/
+var lChartCaption = "График расхода денежных средств за ноябрь 2014";
+chart.append("text")
+    .attr("x", chartWidth / 2)
+    .attr("y", -chartMargin.top / 2)
+    .style({"text-anchor": "middle", "font": "24px Courier New"})
+    .text(lChartCaption);
+
+/* pidkazka */
+// var labelsContainers = chart.selectAll("g.label")
+// var labelsContainers = chart.selectAll("g.city")
+var labelsContainers = chart.selectAll("g._id")
+    .data(dataset)
+    .enter()
+    .append("g")
+    .attr("class", "label")
+    // .attr("class", "city")
+    // .attr("class", "_id")
+    .attr("transform", function (d) {
+        // var lInitialX = xScale(d.label);
+        // var lInitialX = xScale(d.city);
+        var lInitialX = xScale(d._id);
+        var lX = lInitialX + xScale.rangeBand() / 2;
+        var lY = yScale(d.population);
+        return "translate(" + lX + ", " + lY + ")";
+    })
+    .attr("id", function (d, i) { return "label" + i; })
+    // .attr("id", function (d, i) { return "city" + i; })
+    // .attr("id", function (d, i) { return "_id" + i; })
+    .style("display", "none");
+    labelsContainers.append("polygon")
+    .attr("points", "0,0 -5,-10 -50,-10 -50,-50 50,-50 50,-10 5,-10");
+    labelsContainers.append("text")
+    .attr("id", function (d, i) { return "date" + i; })
+    // .attr("id", function (d, i) { return "_id" + i; })
+    .attr("x", "0")
+    .attr("y", function (d) {
+        return -35;
+    })
+    .style("text-anchor", "middle")
+    // .text(function (d) { return "Дата: " + d.label; });
+    // .text(function (d) { return "Дата: " + d.city; });
+    .text(function (d) { return "Дата: " + d.city; });
+    labelsContainers.append("text")
+    .attr("id", function (d, i) { return "value" + i; })
+    .attr("x", "0")
+    .attr("y", function (d) {
+        return -15;
+    })
+    .style("text-anchor", "middle")
+    // .text(function (d) { return "Расходы: " + d.data; });
+    .text(function (d) { return "Расходы: " + d._id; });
+
+</script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+</body>
+</html>

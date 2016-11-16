@@ -1,0 +1,82 @@
+/* Global Styles */
+
+/*svg {
+    margin-left: 100px;
+}*/
+
+/*table, th, td {
+    border: 1px solid #008000;
+}*/
+
+svg rect.bar {
+          fill: #510FAD;
+}
+svg rect.bar:hover {
+  fill: #00C12B;
+}
+.axis {
+  font: 14px sans-serif;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.x.axis path {
+  display: none;
+}
+.label {
+  font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.label polygon {
+  fill: #FFFFFF;
+  stroke: #A64100;
+  stroke-width: 3;
+}
+
+table {
+	/*width: auto;*/
+	width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+	border-collapse: separate;
+ 	border-spacing: 0;
+  	font: 14px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+th,
+td {
+	border: 1px solid #cecfd5;
+	padding: 10px 15px;
+	vertical-align: middle;
+}
+th {
+ 	background: #395870;
+	background: linear-gradient(#49708f, #293f50);
+	color: #fff;
+	font-size: 12px;
+	text-transform: uppercase;
+}
+th:first-child {
+	text-align: left;
+}
+tbody tr:nth-child(even) {
+	background: #f0f0f2;
+}
+td {
+	border-bottom: 1px solid #cecfd5;
+	border-right: 1px solid #cecfd5;
+}
+td:first-child {
+	border-left: 1px solid #cecfd5;
+}
+/*tfoot {
+	text-align: right;
+}
+tfoot tr:last-child {
+	background: #f0f0f2;
+}*/
+tr:last-child {
+	background: #f0f0f2;
+}
