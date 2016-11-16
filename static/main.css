@@ -1,13 +1,5 @@
 /* Global Styles */
 
-/*svg {
-    margin-left: 100px;
-}*/
-
-/*table, th, td {
-    border: 1px solid #008000;
-}*/
-
 svg rect.bar {
           fill: #510FAD;
 }
@@ -71,12 +63,6 @@ td {
 td:first-child {
 	border-left: 1px solid #cecfd5;
 }
-/*tfoot {
-	text-align: right;
-}
-tfoot tr:last-child {
-	background: #f0f0f2;
-}*/
 tr:last-child {
 	background: #f0f0f2;
 }
