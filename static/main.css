@@ -1,31 +1,31 @@
 /* Global Styles */
 
 svg rect.bar {
-          fill: #510FAD;
+    fill: #510FAD;
 }
 svg rect.bar:hover {
-  fill: #00C12B;
+    fill: #00C12B;
 }
 .axis {
-  font: 14px sans-serif;
+    font: 14px sans-serif;
 }
 .axis path,
 .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
 }
 .x.axis path {
-  display: none;
+    display: none;
 }
 .label {
-  font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .label polygon {
-  fill: #FFFFFF;
-  stroke: #A64100;
-  stroke-width: 3;
+	fill: #FFFFFF;
+	stroke: #A64100;
+	stroke-width: 3;
 }
 
 table {
